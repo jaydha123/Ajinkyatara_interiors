@@ -36,7 +36,7 @@ const Footer = () => {
   const contactInfo = [
     { icon: MapPin, text: 'Mumbai, Pune, Ahmedabad, Surat' },
     { icon: Phone, text: '+91 98765 43210' },
-    { icon: Mail, text: 'info@basilhomes.in' }
+    { icon: Mail, text: 'info@ajinkyataraassociates.in' }
   ];
 
   return (
@@ -46,7 +46,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-1">
             <div className="mb-6">
-              <img src={basilLogo} alt="Basil Homes" className="h-8 w-auto mb-4 brightness-0 invert" />
+              <img src={basilLogo} alt="Ajinkyatara Associates" className="h-8 w-auto mb-4 brightness-0 invert" />
               <p className="text-background/80 leading-relaxed">
                 Transform your space with our expert interior design services. Creating beautiful, functional homes that reflect your style.
               </p>
@@ -138,7 +138,7 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-background/70 text-sm">
-            © 2024 Basil Homes. All rights reserved.
+            © 2024 Ajinkyatara Associates. All rights reserved.
           </p>
           <div className="flex gap-6">
             {footerLinks.support.slice(2).map((link) => (

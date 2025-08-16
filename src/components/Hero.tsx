@@ -37,7 +37,7 @@ const Hero = () => {
               <span className="text-primary-light">Dream Home</span>
             </h1>
             <p className="text-xl mb-8 text-white/90">
-              Consult a Basil Homes Design Expert for free
+              Consult an Ajinkyatara Associates Design Expert for free
             </p>
             <Button 
               size="lg" 
