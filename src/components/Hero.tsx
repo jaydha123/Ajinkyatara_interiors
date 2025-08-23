@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import heroImage from '@/assets/hero-interior.jpg';
 
 const Hero = () => {
@@ -15,6 +16,32 @@ const Hero = () => {
     phone: '',
     city: ''
   });
+
+  const handleConsultationClick = () => {
+    toast.success('Thank you for your interest! We will contact you soon for a free consultation.');
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Basic validation
+    if (!formData.houseType || !formData.carpetArea || !formData.name || !formData.phone) {
+      toast.error('Please fill in all required fields.');
+      return;
+    }
+
+    toast.success('Thank you for your inquiry! Our team will contact you within 24 hours.');
+    
+    // Reset form
+    setFormData({
+      lookingFor: '',
+      houseType: '',
+      carpetArea: '',
+      name: '',
+      phone: '',
+      city: ''
+    });
+  };
 
   return (
     <section className="relative min-h-screen flex items-center pt-16">
@@ -41,6 +68,7 @@ const Hero = () => {
             </p>
             <Button 
               size="lg" 
+              onClick={handleConsultationClick}
               className="bg-primary hover:bg-primary-dark text-white text-lg px-8 py-4 h-auto shadow-strong"
             >
               Book Free Online Consultation
@@ -49,7 +77,7 @@ const Hero = () => {
 
           {/* Right Form */}
           <Card className="p-8 bg-white/95 backdrop-blur-sm shadow-strong">
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <Label htmlFor="lookingFor" className="text-base font-semibold mb-3 block">
                   Looking for
