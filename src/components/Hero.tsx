@@ -21,7 +21,7 @@ const Hero = () => {
     toast.success('Thank you for your interest! We will contact you soon for a free consultation.');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -30,17 +30,35 @@ const Hero = () => {
       return;
     }
 
-    toast.success('Thank you for your inquiry! Our team will contact you within 24 hours.');
-    
-    // Reset form
-    setFormData({
-      lookingFor: '',
-      houseType: '',
-      carpetArea: '',
-      name: '',
-      phone: '',
-      city: ''
-    });
+    try {
+      const response = await fetch('https://your-project-ref.supabase.co/functions/v1/send-contact-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast.success('Thank you for your inquiry! Our team will contact you within 24 hours.');
+        // Reset form
+        setFormData({
+          lookingFor: '',
+          houseType: '',
+          carpetArea: '',
+          name: '',
+          phone: '',
+          city: ''
+        });
+      } else {
+        toast.error('Failed to send your inquiry. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('Failed to send your inquiry. Please try again.');
+    }
   };
 
   return (
