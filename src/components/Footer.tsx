@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { MapPin, Phone, Mail, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
-import basilLogo from '@/assets/basil-logo.png';
+import ajinkyataraLogo from '@/assets/ajinkyatara-logo.jpg';
 
 const Footer = () => {
   const footerLinks = {
@@ -46,7 +46,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-1">
             <div className="mb-6">
-              <img src={basilLogo} alt="Ajinkyatara Associates" className="h-8 w-auto mb-4 brightness-0 invert" />
+              <img src={ajinkyataraLogo} alt="Ajinkyatara Associates" className="h-12 w-auto mb-4" />
               <p className="text-background/80 leading-relaxed">
                 Transform your space with our expert interior design services. Creating beautiful, functional homes that reflect your style.
               </p>
