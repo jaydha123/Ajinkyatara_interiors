@@ -34,9 +34,9 @@ const Footer = () => {
   ];
 
   const contactInfo = [
-    { icon: MapPin, text: 'Mumbai, Pune, Ahmedabad, Surat' },
-    { icon: Phone, text: '+91 98765 43210' },
-    { icon: Mail, text: 'info@ajinkyataraassociates.in' }
+    { icon: MapPin, text: 'Pune A11, Mayur Park Society, Kothrud, Pune 411038' },
+    { icon: Phone, text: '8668404748' },
+    { icon: Mail, text: 'ajinkyatara.associates@gmail.com' }
   ];
 
   return (
