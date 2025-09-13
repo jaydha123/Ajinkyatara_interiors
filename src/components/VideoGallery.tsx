@@ -20,9 +20,9 @@ const VideoGallery = () => {
       description: 'Complete living room makeover with elegant furniture and lighting'
     },
     {
-      id: 'kJQP7kiw5Fk',
+      id: '0dsfo1dH-7c',
       title: 'Complete Home Interior Project',
-      thumbnail: 'https://img.youtube.com/vi/kJQP7kiw5Fk/maxresdefault.jpg',
+      thumbnail: 'https://img.youtube.com/vi/0dsfo1dH-7c/maxresdefault.jpg',
       description: 'Full home interior design from concept to completion'
     },
     {
