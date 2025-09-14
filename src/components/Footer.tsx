@@ -44,7 +44,7 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <div className="mb-6">
               <img src={ajinkyataraLogo} alt="Ajinkyatara Associates" className="h-12 w-auto mb-4" />
-              <p className="text-background/80 leading-relaxed">
+              <p className="text-background/80 leading-relaxed text-xl">
                 Transform your space with our expert interior design services. Creating beautiful, functional homes that reflect your style.
               </p>
             </div>
