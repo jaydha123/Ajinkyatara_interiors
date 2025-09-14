@@ -21,7 +21,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <img src={ajinkyataraLogo} alt="Ajinkyatara Associates" className="h-8 w-auto" />
-            <span className="text-foreground font-semibold text-lg">Ajinkyatara Associates</span>
+            <span className="text-foreground font-semibold text-xl">Ajinkyatara Associates</span>
           </div>
 
           {/* Desktop Navigation */}
