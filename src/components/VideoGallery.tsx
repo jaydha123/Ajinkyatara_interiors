@@ -8,27 +8,21 @@ const VideoGallery = () => {
 
   const videos = [
     {
-      id: 'dQw4w9WgXcQ',
+      id: '0dsfo1dH-7c',
       title: 'Modern Kitchen Design - Ajinkyatara Associates',
-      thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+      thumbnail: 'https://img.youtube.com/vi/0dsfo1dH-7c/maxresdefault.jpg',
       description: 'Stunning modern kitchen interior design with contemporary finishes'
     },
     {
-      id: 'J---aiyznGQ',
+      id: '0dsfo1dH-7c',
       title: 'Luxury Living Room Transformation',
-      thumbnail: 'https://img.youtube.com/vi/J---aiyznGQ/maxresdefault.jpg',
+      thumbnail: 'https://img.youtube.com/vi/0dsfo1dH-7c/maxresdefault.jpg',
       description: 'Complete living room makeover with elegant furniture and lighting'
     },
     {
       id: '0dsfo1dH-7c',
-      title: 'Complete Home Interior Project',
-      thumbnail: 'https://img.youtube.com/vi/0dsfo1dH-7c/maxresdefault.jpg',
-      description: 'Full home interior design from concept to completion'
-    },
-    {
-      id: 'lp-EO5I60KA',
       title: 'Office Interior Design Solutions',
-      thumbnail: 'https://img.youtube.com/vi/lp-EO5I60KA/maxresdefault.jpg',
+      thumbnail: 'https://img.youtube.com/vi/0dsfo1dH-7c/maxresdefault.jpg',
       description: 'Professional office space design for productivity and aesthetics'
     }
   ];
