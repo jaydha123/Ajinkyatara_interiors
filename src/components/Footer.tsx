@@ -31,7 +31,7 @@ const Footer = () => {
   ];
 
   const contactInfo = [
-    { icon: MapPin, text: 'Pune A11, Mayur Park Society, Kothrud, Pune 411038' },
+    { icon: MapPin, text: 'A11, Mayur Park Society, Kothrud, Pune 411038' },
     { icon: Phone, text: '8668404748' },
     { icon: Mail, text: 'ajinkyatara.associates@gmail.com' }
   ];
