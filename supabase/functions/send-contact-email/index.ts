@@ -22,7 +22,7 @@ serve(async (req) => {
 
     // Send email using Resend
     const emailData = {
-      from: 'noreply@your-domain.com', // You'll need to verify this domain with Resend
+      from: 'noreply@yourdomain.com', // Replace with your verified domain
       to: ['dhamalejay007@gmail.com'],
       subject: `New Contact Form Submission - ${name}`,
       html: `
