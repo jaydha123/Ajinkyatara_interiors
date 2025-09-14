@@ -1,16 +1,28 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { ArrowRight } from 'lucide-react';
 import kitchenImage from '@/assets/kitchen-interior.jpg';
 import civilWorkImage from '@/assets/civil-work.jpg';
+import fullHome1 from '@/assets/full_home.jpg';
+import fullHome2 from '@/assets/full_home2.jpg';
+import fullHome3 from '@/assets/full_home3.jpg';
+import fullHome4 from '@/assets/full_home4.jpg';
+import fullHome5 from '@/assets/full_home5.jpg';
+import fullHome6 from '@/assets/full_home6.jpg';
+import fullHome7 from '@/assets/full_home7.jpg';
 
 const Services = () => {
+  const fullHomeImages = [
+    fullHome1, fullHome2, fullHome3, fullHome4, fullHome5, fullHome6, fullHome7
+  ];
+
   const services = [
     {
       number: '01',
       title: 'Full home interiors',
       description: 'Want a fun living room, a soothing bedroom or a balcony which becomes your neighbour\'s envy?',
-      image: '/api/placeholder/600/400',
+      images: fullHomeImages,
       link: '#'
     },
     {
@@ -51,13 +63,31 @@ const Services = () => {
             <Card key={index} className="group overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0 bg-gradient-card">
               <div className="relative">
                 <div className="aspect-[4/3] overflow-hidden">
-                  <img 
-                    src={service.image} 
-                    alt={service.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
+                  {service.images ? (
+                    <Carousel className="w-full h-full">
+                      <CarouselContent>
+                        {service.images.map((image, imgIndex) => (
+                          <CarouselItem key={imgIndex}>
+                            <img 
+                              src={image} 
+                              alt={`${service.title} ${imgIndex + 1}`}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            />
+                          </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                      <CarouselPrevious className="left-4 bg-white/90 hover:bg-white border-0 shadow-lg" />
+                      <CarouselNext className="right-4 bg-white/90 hover:bg-white border-0 shadow-lg" />
+                    </Carousel>
+                  ) : (
+                    <img 
+                      src={service.image} 
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                  )}
                 </div>
-                <div className="absolute top-6 left-6">
+                <div className="absolute top-6 left-6 z-10">
                   <div className="bg-primary text-white font-bold text-2xl w-16 h-16 rounded-full flex items-center justify-center shadow-medium">
                     {service.number}
                   </div>
