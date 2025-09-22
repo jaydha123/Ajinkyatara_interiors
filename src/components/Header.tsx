@@ -9,7 +9,7 @@ const Header = () => {
   const navigation = [
     { name: 'Home', href: '#' },
     { name: 'Services', href: '#services' },
-    { name: 'Portfolio', href: '#portfolio' },
+    { name: 'Portfolio', href: '#services' },
     { name: 'About', href: '#about' },
     { name: 'Contact', href: '#contact' },
   ];
