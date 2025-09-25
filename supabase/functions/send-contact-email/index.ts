@@ -22,7 +22,7 @@ serve(async (req) => {
 
     // Send email using Resend
     const emailData = {
-      from: 'noreply@yourdomain.com', // Replace with your verified domain
+      from: 'onboarding@resend.dev', // Using Resend's default verified domain
       to: ['dhamalejay007@gmail.com'],
       subject: `New Contact Form Submission - ${name}`,
       html: `
@@ -62,8 +62,9 @@ serve(async (req) => {
     )
   } catch (error) {
     console.error('Error sending email:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
     return new Response(
-      JSON.stringify({ success: false, error: error.message }),
+      JSON.stringify({ success: false, error: errorMessage }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 400,

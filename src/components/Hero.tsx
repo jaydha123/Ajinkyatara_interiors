@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card } from '@/components/ui/card';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 import heroImage from '@/assets/hero-interior.jpg';
 
 const Hero = () => {
@@ -31,17 +32,17 @@ const Hero = () => {
     }
 
     try {
-      const response = await fetch('https://your-project-ref.supabase.co/functions/v1/send-contact-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: formData,
       });
 
-      const result = await response.json();
+      if (error) {
+        console.error('Supabase function error:', error);
+        toast.error('Failed to send your inquiry. Please try again.');
+        return;
+      }
 
-      if (result.success) {
+      if (data?.success) {
         toast.success('Thank you for your inquiry! Our team will contact you within 24 hours.');
         // Reset form
         setFormData({
