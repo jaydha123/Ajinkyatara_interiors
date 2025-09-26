@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,22 +17,21 @@ const Hero = () => {
     phone: '',
     city: ''
   });
-
   const [state, handleSubmit] = useForm("xkgqgzoe");
 
-  // Show success message
-  if (state.succeeded) {
-    toast.success('Thank you for your inquiry! Our team will contact you within 24 hours.');
-    setFormData({
-      lookingFor: '',
-      houseType: '',
-      carpetArea: '',
-      name: '',
-      phone: '',
-      city: ''
-    });
-    // Optionally, you can render a thank you message instead of the form
-  }
+  useEffect(() => {
+    if (state.succeeded) {
+      toast.success('Thank you for your inquiry! Our team will contact you within 24 hours.');
+      setFormData({
+        lookingFor: '',
+        houseType: '',
+        carpetArea: '',
+        name: '',
+        phone: '',
+        city: ''
+      });
+    }
+  }, [state.succeeded]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -76,129 +75,134 @@ const Hero = () => {
 
           {/* Right Form */}
           <Card className="p-8 bg-white/95 backdrop-blur-sm shadow-strong">
-            {/* You can optionally render a thank you/confirmation message here if state.succeeded */}
-            <form className="space-y-6" onSubmit={(e) => {
-              // Basic validation
-              if (!formData.houseType || !formData.carpetArea || !formData.name || !formData.phone) {
-                e.preventDefault();
-                toast.error('Please fill in all required fields.');
-                return;
-              }
-              handleSubmit(e);
-            }}>
-              <div>
-                <Label htmlFor="lookingFor" className="text-base font-semibold mb-3 block">
-                  Looking for
-                </Label>
-                <Select
-                  value={formData.lookingFor}
-                  onValueChange={(value) => handleSelectChange('lookingFor', value)}
-                  name="lookingFor"
+            {state.succeeded ? (
+              <div className="text-center py-8">
+                <h2 className="text-2xl font-semibold mb-4">Thank you for your inquiry!</h2>
+                <p>Our team will contact you within 24 hours.</p>
+              </div>
+            ) : (
+              <form className="space-y-6" onSubmit={(e) => {
+                // Basic validation
+                if (!formData.houseType || !formData.carpetArea || !formData.name || !formData.phone) {
+                  e.preventDefault();
+                  toast.error('Please fill in all required fields.');
+                  return;
+                }
+                handleSubmit(e);
+              }}>
+                <div>
+                  <Label htmlFor="lookingFor" className="text-base font-semibold mb-3 block">
+                    Looking for
+                  </Label>
+                  <Select
+                    value={formData.lookingFor}
+                    onValueChange={(value) => handleSelectChange('lookingFor', value)}
+                    name="lookingFor"
+                  >
+                    <SelectTrigger className="h-12">
+                      <SelectValue placeholder="Select service type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="home-interior">Home Interior</SelectItem>
+                      <SelectItem value="home-renovation">Home Renovation</SelectItem>
+                      <SelectItem value="commercial-interior">Commercial Interior</SelectItem>
+                      <SelectItem value="job">Job</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <input type="hidden" name="lookingFor" value={formData.lookingFor} />
+                </div>
+
+                <div>
+                  <Label htmlFor="houseType" className="text-base font-semibold mb-3 block">
+                    House Type
+                  </Label>
+                  <Input
+                    id="houseType"
+                    name="houseType"
+                    placeholder="e.g. 2BHK, Villa"
+                    value={formData.houseType}
+                    onChange={handleChange}
+                    className="h-12"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="carpetArea" className="text-base font-semibold mb-3 block">
+                    Carpet Area (sq. ft.)
+                  </Label>
+                  <Input
+                    id="carpetArea"
+                    name="carpetArea"
+                    placeholder="e.g. 800"
+                    value={formData.carpetArea}
+                    onChange={handleChange}
+                    className="h-12"
+                    type="number"
+                    min="0"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="name" className="text-base font-semibold mb-3 block">
+                    Name
+                  </Label>
+                  <Input
+                    id="name"
+                    name="name"
+                    placeholder="Your Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="h-12"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="phone" className="text-base font-semibold mb-3 block">
+                    Phone
+                  </Label>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    placeholder="Your Phone Number"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="h-12"
+                    required
+                    type="tel"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="city" className="text-base font-semibold mb-3 block">
+                    City
+                  </Label>
+                  <Input
+                    id="city"
+                    name="city"
+                    placeholder="Your City"
+                    value={formData.city}
+                    onChange={handleChange}
+                    className="h-12"
+                  />
+                </div>
+
+                <ValidationError prefix="Looking For" field="lookingFor" errors={state.errors} />
+                <ValidationError prefix="House Type" field="houseType" errors={state.errors} />
+                <ValidationError prefix="Carpet Area" field="carpetArea" errors={state.errors} />
+                <ValidationError prefix="Name" field="name" errors={state.errors} />
+                <ValidationError prefix="Phone" field="phone" errors={state.errors} />
+                <ValidationError prefix="City" field="city" errors={state.errors} />
+
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary-dark text-lg py-3"
+                  disabled={state.submitting}
                 >
-                  <SelectTrigger className="h-12">
-                    <SelectValue placeholder="Select service type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="home-interior">Home Interior</SelectItem>
-                    <SelectItem value="home-renovation">Home Renovation</SelectItem>
-                    <SelectItem value="commercial-interior">Commercial Interior</SelectItem>
-                    <SelectItem value="job">Job</SelectItem>
-                  </SelectContent>
-                </Select>
-                <input type="hidden" name="lookingFor" value={formData.lookingFor} />
-              </div>
-
-              <div>
-                <Label htmlFor="houseType" className="text-base font-semibold mb-3 block">
-                  House Type
-                </Label>
-                <Input
-                  id="houseType"
-                  name="houseType"
-                  placeholder="e.g. 2BHK, Villa"
-                  value={formData.houseType}
-                  onChange={handleChange}
-                  className="h-12"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="carpetArea" className="text-base font-semibold mb-3 block">
-                  Carpet Area (sq. ft.)
-                </Label>
-                <Input
-                  id="carpetArea"
-                  name="carpetArea"
-                  placeholder="e.g. 800"
-                  value={formData.carpetArea}
-                  onChange={handleChange}
-                  className="h-12"
-                  type="number"
-                  min="0"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="name" className="text-base font-semibold mb-3 block">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  name="name"
-                  placeholder="Your Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="h-12"
-                  required
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="phone" className="text-base font-semibold mb-3 block">
-                  Phone
-                </Label>
-                <Input
-                  id="phone"
-                  name="phone"
-                  placeholder="Your Phone Number"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="h-12"
-                  required
-                  type="tel"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="city" className="text-base font-semibold mb-3 block">
-                  City
-                </Label>
-                <Input
-                  id="city"
-                  name="city"
-                  placeholder="Your City"
-                  value={formData.city}
-                  onChange={handleChange}
-                  className="h-12"
-                />
-              </div>
-
-              {/* ValidationError fields are optional but recommended for better error display */}
-              <ValidationError prefix="Looking For" field="lookingFor" errors={state.errors} />
-              <ValidationError prefix="House Type" field="houseType" errors={state.errors} />
-              <ValidationError prefix="Carpet Area" field="carpetArea" errors={state.errors} />
-              <ValidationError prefix="Name" field="name" errors={state.errors} />
-              <ValidationError prefix="Phone" field="phone" errors={state.errors} />
-              <ValidationError prefix="City" field="city" errors={state.errors} />
-
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary-dark text-lg py-3"
-                disabled={state.submitting}
-              >
-                Book Free Online Consultation
-              </Button>
-            </form>
+                  Book Free Online Consultation
+                </Button>
+              </form>
+            )}
           </Card>
         </div>
       </div>
