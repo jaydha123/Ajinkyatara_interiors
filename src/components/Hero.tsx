@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card } from '@/components/ui/card';
 import { toast } from 'sonner';
 import heroImage from '@/assets/hero-interior.jpg';
+import { useForm, ValidationError } from '@formspree/react';
 
 const Hero = () => {
   const [formData, setFormData] = useState({
@@ -17,49 +18,28 @@ const Hero = () => {
     city: ''
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const [state, handleSubmit] = useForm("xkgqgzoe");
+
+  // Show success message
+  if (state.succeeded) {
+    toast.success('Thank you for your inquiry! Our team will contact you within 24 hours.');
+    setFormData({
+      lookingFor: '',
+      houseType: '',
+      carpetArea: '',
+      name: '',
+      phone: '',
+      city: ''
+    });
+    // Optionally, you can render a thank you message instead of the form
+  }
+
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSelectChange = (field: string, value: string) => {
+  const handleSelectChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Basic validation
-    if (!formData.houseType || !formData.carpetArea || !formData.name || !formData.phone) {
-      toast.error('Please fill in all required fields.');
-      return;
-    }
-
-    try {
-      const form = new FormData();
-      Object.entries(formData).forEach(([key, value]) => form.append(key, value));
-
-      const response = await fetch('https://formspree.io/f/xkgqgzoe', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: form,
-      });
-
-      const result = await response.json();
-      if (result.ok) {
-        toast.success('Thank you for your inquiry! Our team will contact you within 24 hours.');
-        setFormData({
-          lookingFor: '',
-          houseType: '',
-          carpetArea: '',
-          name: '',
-          phone: '',
-          city: ''
-        });
-      } else {
-        toast.error('Failed to send your inquiry. Please try again.');
-      }
-    } catch (error) {
-      toast.error('Failed to send your inquiry. Please try again.');
-    }
   };
 
   return (
@@ -96,7 +76,16 @@ const Hero = () => {
 
           {/* Right Form */}
           <Card className="p-8 bg-white/95 backdrop-blur-sm shadow-strong">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* You can optionally render a thank you/confirmation message here if state.succeeded */}
+            <form className="space-y-6" onSubmit={(e) => {
+              // Basic validation
+              if (!formData.houseType || !formData.carpetArea || !formData.name || !formData.phone) {
+                e.preventDefault();
+                toast.error('Please fill in all required fields.');
+                return;
+              }
+              handleSubmit(e);
+            }}>
               <div>
                 <Label htmlFor="lookingFor" className="text-base font-semibold mb-3 block">
                   Looking for
@@ -116,6 +105,7 @@ const Hero = () => {
                     <SelectItem value="job">Job</SelectItem>
                   </SelectContent>
                 </Select>
+                <input type="hidden" name="lookingFor" value={formData.lookingFor} />
               </div>
 
               <div>
@@ -193,9 +183,18 @@ const Hero = () => {
                 />
               </div>
 
+              {/* ValidationError fields are optional but recommended for better error display */}
+              <ValidationError prefix="Looking For" field="lookingFor" errors={state.errors} />
+              <ValidationError prefix="House Type" field="houseType" errors={state.errors} />
+              <ValidationError prefix="Carpet Area" field="carpetArea" errors={state.errors} />
+              <ValidationError prefix="Name" field="name" errors={state.errors} />
+              <ValidationError prefix="Phone" field="phone" errors={state.errors} />
+              <ValidationError prefix="City" field="city" errors={state.errors} />
+
               <Button
                 type="submit"
                 className="w-full bg-primary hover:bg-primary-dark text-lg py-3"
+                disabled={state.submitting}
               >
                 Book Free Online Consultation
               </Button>
