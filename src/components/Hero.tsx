@@ -1,11 +1,10 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
-import { useState } from 'react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
 import heroImage from '@/assets/hero-interior.jpg';
 
 const Hero = () => {
@@ -18,13 +17,16 @@ const Hero = () => {
     city: ''
   });
 
-  const handleConsultationClick = () => {
-    toast.success('Thank you for your interest! We will contact you soon for a free consultation.');
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSelectChange = (field: string, value: string) => {
+    setFormData({ ...formData, [field]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     // Basic validation
     if (!formData.houseType || !formData.carpetArea || !formData.name || !formData.phone) {
       toast.error('Please fill in all required fields.');
@@ -32,19 +34,18 @@ const Hero = () => {
     }
 
     try {
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: formData,
+      const form = new FormData();
+      Object.entries(formData).forEach(([key, value]) => form.append(key, value));
+
+      const response = await fetch('https://formspree.io/f/xkgqgzoe', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: form,
       });
 
-      if (error) {
-        console.error('Supabase function error:', error);
-        toast.error('Failed to send your inquiry. Please try again.');
-        return;
-      }
-
-      if (data?.success) {
+      const result = await response.json();
+      if (result.ok) {
         toast.success('Thank you for your inquiry! Our team will contact you within 24 hours.');
-        // Reset form
         setFormData({
           lookingFor: '',
           houseType: '',
@@ -57,7 +58,6 @@ const Hero = () => {
         toast.error('Failed to send your inquiry. Please try again.');
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
       toast.error('Failed to send your inquiry. Please try again.');
     }
   };
@@ -66,9 +66,9 @@ const Hero = () => {
     <section className="relative min-h-screen flex items-center pt-16">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src={heroImage} 
-          alt="Beautiful Interior Design" 
+        <img
+          src={heroImage}
+          alt="Beautiful Interior Design"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/40"></div>
@@ -85,9 +85,9 @@ const Hero = () => {
             <p className="text-xl mb-8 text-white/90">
               Consult an Ajinkyatara Associates Design Expert for free
             </p>
-            <Button 
-              size="lg" 
-              onClick={handleConsultationClick}
+            <Button
+              size="lg"
+              onClick={() => toast.success('Thank you for your interest! We will contact you soon for a free consultation.')}
               className="bg-primary hover:bg-primary-dark text-white text-lg px-8 py-4 h-auto shadow-strong"
             >
               Book Free Online Consultation
@@ -101,7 +101,11 @@ const Hero = () => {
                 <Label htmlFor="lookingFor" className="text-base font-semibold mb-3 block">
                   Looking for
                 </Label>
-                <Select value={formData.lookingFor} onValueChange={(value) => setFormData({...formData, lookingFor: value})}>
+                <Select
+                  value={formData.lookingFor}
+                  onValueChange={(value) => handleSelectChange('lookingFor', value)}
+                  name="lookingFor"
+                >
                   <SelectTrigger className="h-12">
                     <SelectValue placeholder="Select service type" />
                   </SelectTrigger>
@@ -116,61 +120,62 @@ const Hero = () => {
 
               <div>
                 <Label htmlFor="houseType" className="text-base font-semibold mb-3 block">
-                  House Type *
+                  House Type
                 </Label>
-                <Select value={formData.houseType} onValueChange={(value) => setFormData({...formData, houseType: value})}>
-                  <SelectTrigger className="h-12">
-                    <SelectValue placeholder="Select house type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1bhk">1 BHK</SelectItem>
-                    <SelectItem value="2bhk">2 BHK</SelectItem>
-                    <SelectItem value="3bhk">3 BHK</SelectItem>
-                    <SelectItem value="4bhk">4+ BHK / Duplex</SelectItem>
-                    <SelectItem value="villa">Villa</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Input
+                  id="houseType"
+                  name="houseType"
+                  placeholder="e.g. 2BHK, Villa"
+                  value={formData.houseType}
+                  onChange={handleChange}
+                  className="h-12"
+                />
               </div>
 
               <div>
                 <Label htmlFor="carpetArea" className="text-base font-semibold mb-3 block">
-                  Carpet Area (In Sqft) *
+                  Carpet Area (sq. ft.)
                 </Label>
-                <Input 
+                <Input
                   id="carpetArea"
-                  type="number"
-                  placeholder="Enter carpet area"
+                  name="carpetArea"
+                  placeholder="e.g. 800"
                   value={formData.carpetArea}
-                  onChange={(e) => setFormData({...formData, carpetArea: e.target.value})}
+                  onChange={handleChange}
                   className="h-12"
+                  type="number"
+                  min="0"
                 />
               </div>
 
               <div>
                 <Label htmlFor="name" className="text-base font-semibold mb-3 block">
-                  Name *
+                  Name
                 </Label>
-                <Input 
+                <Input
                   id="name"
-                  type="text"
-                  placeholder="Enter your name"
+                  name="name"
+                  placeholder="Your Name"
                   value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  onChange={handleChange}
                   className="h-12"
+                  required
                 />
               </div>
 
               <div>
                 <Label htmlFor="phone" className="text-base font-semibold mb-3 block">
-                  Phone Number *
+                  Phone
                 </Label>
-                <Input 
+                <Input
                   id="phone"
-                  type="tel"
-                  placeholder="Enter phone number"
+                  name="phone"
+                  placeholder="Your Phone Number"
                   value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  onChange={handleChange}
                   className="h-12"
+                  required
+                  type="tel"
                 />
               </div>
 
@@ -178,25 +183,21 @@ const Hero = () => {
                 <Label htmlFor="city" className="text-base font-semibold mb-3 block">
                   City
                 </Label>
-                <Input 
+                <Input
                   id="city"
-                  type="text"
-                  placeholder="Enter your city"
+                  name="city"
+                  placeholder="Your City"
                   value={formData.city}
-                  onChange={(e) => setFormData({...formData, city: e.target.value})}
+                  onChange={handleChange}
                   className="h-12"
                 />
               </div>
 
-              <div className="text-sm text-muted-foreground">
-                By submitting this form, you agree to the privacy policy & terms and conditions
-              </div>
-
-              <Button 
+              <Button
                 type="submit"
-                className="w-full h-12 bg-gradient-hero text-white text-lg font-semibold hover:opacity-90 transition-opacity"
+                className="w-full bg-primary hover:bg-primary-dark text-lg py-3"
               >
-                Submit
+                Book Free Online Consultation
               </Button>
             </form>
           </Card>
